@@ -15,7 +15,7 @@ app.use(bodyParser.json())
 
 app.post('/inbound/sms', (req, res) => {
   let body = req.body.Body
-  io.sockets.emit('new message', body)
+  io.sockets.emit('new message', { username: 'A Phone', message: body })
   let twiml = `
   <Response>
     <Message>Thanks for texting!</Message>
@@ -26,7 +26,6 @@ app.post('/inbound/sms', (req, res) => {
 
 io.on('connection', socket => {
   socket.on('new message', message => {
-    console.log('got new message', message)
     socket.broadcast.emit('new message', message)
   })
 })
